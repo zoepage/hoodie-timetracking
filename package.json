@@ -1,0 +1,37 @@
+{
+  "name": "time",
+  "version": "3.0.0",
+  "type": "app",
+  "dependencies": {
+    "hoodie-server": "^2.0.0",
+    "hoodie-plugin-appconfig": "^2.0.1",
+    "hoodie-plugin-email": "^1.0.0",
+    "hoodie-plugin-users": "^2.1.0"
+  },
+  "files": [
+    "www/"
+  ],
+  "engines": {
+    "node": ">=0.10.22"
+  },
+  "scripts": {
+    "start": "node node_modules/hoodie-server/bin/start"
+  },
+  "hoodie": {
+    "plugins": [
+      "hoodie-plugin-appconfig",
+      "hoodie-plugin-email",
+      "hoodie-plugin-users"
+    ]
+  },
+  "description": "## Installation",
+  "_id": "my-first-hoodie@3.0.0",
+  "dist": {
+    "shasum": "2cff3f5f59e47bc458dd4eb54d68dd6ad52bf4a0",
+    "tarball": "http://registry.npmjs.org/my-first-hoodie/-/my-first-hoodie-3.0.0.tgz"
+  },
+  "directories": {},
+  "_shasum": "2cff3f5f59e47bc458dd4eb54d68dd6ad52bf4a0",
+  "_resolved": "https://registry.npmjs.org/my-first-hoodie/-/my-first-hoodie-3.0.0.tgz",
+  "readme": "ERROR: No README data found!"
+}
