@@ -1,7 +1,43 @@
 "use strict";
+
 // initialize Hoodie
 var hoodie  = new Hoodie();
 
+
+var getTime = function getTime(eve){
+    var time = Date.now();
+    var diff;
+    var start = sessionStorage.getItem('start');
+    var ID;
+
+    if (ID == undefined) {
+    }
+
+    if (start){
+      diff = Date.now() - start;
+      console.log(time + ' diff: ' + diff);
+
+      hoodie.store.add('time', { title: diff })
+        .done(function(time) { console.log(time); })
+        .fail(function(error){console.log(error);});
+    }
+
+    sessionStorage.setItem('start', time);
+}
+
+      hoodie.store.findAll('time').done(function(allTodos) {
+        for (var i = 0, len = allTodos.length; i<len; i++) {
+          $('#timeList').append(
+            '<li data-id="' + allTodos[i].id + '">' +
+              allTodos[i].title +
+            '</li>'
+          );
+        }
+      });
+
+$('#track').bind('click', getTime);
+
+/*
 // Todos Collection/View
 function Todos($element) {
   var collection = [];
@@ -97,3 +133,4 @@ $('#todoinput').on('keypress', function(event) {
     event.target.value = '';
   }
 });
+*/
