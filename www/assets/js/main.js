@@ -8,10 +8,6 @@ var getTime = function getTime(eve){
     var time = Date.now();
     var diff;
     var start = sessionStorage.getItem('start');
-    var ID;
-
-    if (ID == undefined) {
-    }
 
     if (start){
       diff = Date.now() - start;

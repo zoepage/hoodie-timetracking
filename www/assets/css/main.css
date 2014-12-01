@@ -1,0 +1,21 @@
+body {
+	background-color: #01a372;
+	color: #fff;
+	font-family: helvetica, sans-serif;
+	font-weight: 300;
+}
+
+	#container {
+		width: 600px;
+		margin: 40px auto;
+	}
+
+		ul {
+			list-style: none;
+		}
+			li {
+				display: block;
+				border-bottom: 1px solid #01895e;
+				height: 20px;
+				padding: 8px 5px;
+			}
