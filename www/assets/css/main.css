@@ -8,14 +8,40 @@ body {
 	#container {
 		width: 600px;
 		margin: 40px auto;
+		text-align: center;
+	}
+
+	.headline {
+		font-weight: 300;
+		margin-bottom: 30px;
+		color: #01895e;
+		text-transform: uppercase;
+	}
+
+	button {
+		margin: 0 10px 30px;
+		height: 40px;
+		width: 250px;
+		border: 2px solid #01895e;
+		background-color: #01a372;
+		color: #b5e0d2;
+		font-size: 20px;
+		cursor: pointer;
 	}
 
 		ul {
 			list-style: none;
+			margin-bottom: 25px; 
 		}
 			li {
 				display: block;
 				border-bottom: 1px solid #01895e;
-				height: 20px;
-				padding: 8px 5px;
+				padding: 20px 10px;
+				text-align: left;
+				font-size: 18px;
+				color: #b5e0d2;
 			}
+
+	footer {
+		color: #027752;
+	}

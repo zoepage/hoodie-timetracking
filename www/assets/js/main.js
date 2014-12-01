@@ -3,6 +3,11 @@
 // initialize Hoodie
 var hoodie  = new Hoodie();
 
+/*
+hoodie.store.removeAll('time')
+  .done(function(removedTodos) {})
+  .fail(function(error) {});
+*/
 
 var getTime = function getTime(eve){
     var time = Date.now();
@@ -11,7 +16,8 @@ var getTime = function getTime(eve){
 
     if (start){
       diff = Date.now() - start;
-      console.log(time + ' diff: ' + diff);
+
+      diff = formatTime(diff);
 
       hoodie.store.add('time', { title: diff })
         .done(function(time) { console.log(time); })
@@ -31,102 +37,46 @@ var getTime = function getTime(eve){
         }
       });
 
-$('#track').bind('click', getTime);
 
-/*
-// Todos Collection/View
-function Todos($element) {
-  var collection = [];
-  var $el = $element;
 
-  // Handle marking todo as "done"
-  $el.on('click', 'input[type=checkbox]', function() {
-    hoodie.store.remove('todo', $(this).parent().data('id'));
-    return false;
-  });
+/* HELPER FUNCTIONs
+   @desc:   formating the milliseconds in seconds, minutes and hours
+   @param:  tracked time in milliseconds
+*/
+var formatTime = function formatTime(ms_time){
+  var time = ms_time;
+  var ms, s, m, h;
 
-  // Handle "inline editing" of a todo.
-  $el.on('click', 'label', function() {
-    $(this).parent().parent().find('.editing').removeClass('editing');
-    $(this).parent().addClass('editing');
-    return false;
-  });
-
-  // Handle updating of an "inline edited" todo.
-  $el.on('keypress', 'input[type=text]', function(event) {
-    if (event.keyCode === 13) {
-      hoodie.store.update('todo', $(this).parent().data('id'), {title: event.target.value});
-    }
-  });
-
-  // Find index/position of a todo in collection.
-  function getTodoItemIndexById(id) {
-    for (var i = 0, len = collection.length; i < len; i++) {
-      if (collection[i].id === id) {
-        return i;
-      }
-    }
-    return null;
+// when the tracked time is more then an hour (60 * 60 * 1000)
+  if (time > 3600000) {
+    h = parseInt(time / 3600000);
+    time = time % 3600000;
+  } else {
+    h = 0;
   }
 
-  function paint() {
-    $el.html('');
-    collection.sort(function(a, b) {
-      return ( a.createdAt > b.createdAt ) ? 1 : -1;
-    });
-    for (var i = 0, len = collection.length; i<len; i++) {
-      $el.append(
-        '<li data-id="' + collection[i].id + '">' +
-          '<input type="checkbox"> <label>' + collection[i].title + '</label>' +
-          '<input type="text" value="' + collection[i].title + '"/>' +
-        '</li>'
-      );
-    }
+// when the tracked time is more then a minute (60 * 1000)
+  if (time > 60000) {
+    m = parseInt(time / 60000);
+    time = time % 60000;
+  } else {
+    m = 0;
   }
 
-  this.add = function(todo) {
-    collection.push(todo);
-    paint();
-  };
+// when the tracked time is more then a second (1000)
+  if (time > 1000) {
+    s = parseInt(time / 1000);
+    time = time % 1000;
+  } else {
+    s = 0;
+  }
 
-  this.update = function(todo) {
-    collection[getTodoItemIndexById(todo.id)] = todo;
-    paint();
-  };
+// else the tracked time is less then a second
+  ms = time;
 
-  this.remove = function(todo) {
-    collection.splice(getTodoItemIndexById(todo.id), 1);
-    paint();
-  };
-
-  this.clear = function() {
-    collection = [];
-    paint();
-  };
+  return String(h)+ ' : ' + String(m) + ' : ' + String(s) + ' : ' + String(ms);
 }
 
-// Instantiate Todos collection & view.
-var todos = new Todos($('#todolist'));
-
-// initial load of all todo items from the store
-hoodie.store.findAll('todo').then(function(allTodos) {
-  allTodos.forEach(todos.add);
-});
-
-// when a todo changes, update the UI.
-hoodie.store.on('add:todo', todos.add);
-hoodie.store.on('update:todo', todos.update);
-hoodie.store.on('remove:todo', todos.remove);
-// clear todos when user logs out,
-hoodie.account.on('signout', todos.clear);
 
 
-// handle creating a new task
-$('#todoinput').on('keypress', function(event) {
-  // ENTER & non-empty.
-  if (event.keyCode === 13 && event.target.value.length) {
-    hoodie.store.add('todo', {title: event.target.value});
-    event.target.value = '';
-  }
-});
-*/
+$('#track').bind('click', getTime);
