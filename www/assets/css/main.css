@@ -6,7 +6,7 @@ body {
 }
 
 	#container {
-		width: 600px;
+		width: 320px;
 		margin: 40px auto;
 		text-align: center;
 	}
@@ -32,6 +32,7 @@ body {
 		ul {
 			list-style: none;
 			margin-bottom: 25px; 
+			-webkit-padding-start: 0px;
 		}
 			li {
 				display: block;

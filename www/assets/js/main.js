@@ -1,13 +1,15 @@
-"use strict";
+'use strict';
 
-// initialize Hoodie
-var hoodie  = new Hoodie();
+// init hoodie
+window.hoodie   = new Hoodie();
 
-/*
-hoodie.store.removeAll('time')
-  .done(function(removedTodos) {})
-  .fail(function(error) {});
-*/
+// init timeTracker
+window.timeTracker = window.timeTracker || {};
+
+
+
+// init vars
+
 
 var getTime = function getTime(eve){
     var time = Date.now();
@@ -20,22 +22,13 @@ var getTime = function getTime(eve){
       diff = formatTime(diff);
 
       hoodie.store.add('time', { title: diff })
-        .done(function(time) { console.log(time); })
-        .fail(function(error){console.log(error);});
+        .done(function(time) { loadDOM(); })
+        .fail(function(error){ alert(error); });
     }
 
     sessionStorage.setItem('start', time);
 }
 
-      hoodie.store.findAll('time').done(function(allTodos) {
-        for (var i = 0, len = allTodos.length; i<len; i++) {
-          $('#timeList').append(
-            '<li data-id="' + allTodos[i].id + '">' +
-              allTodos[i].title +
-            '</li>'
-          );
-        }
-      });
 
 
 
@@ -74,9 +67,43 @@ var formatTime = function formatTime(ms_time){
 // else the tracked time is less then a second
   ms = time;
 
-  return String(h)+ ' : ' + String(m) + ' : ' + String(s) + ' : ' + String(ms);
+  return String(h)+ ' : ' + String(m) + ' : ' + String(s);
 }
 
+var loadDOM = function loadDOM(){
+      hoodie.store.findAll('time').done(function(allTodos) {
+        $('#timeList').empty();
+        for (var i = 0, len = allTodos.length; i<len; i++) {
+          $('#timeList').append(
+            '<li data-id="' + allTodos[i].id + '">' +
+              allTodos[i].title +
+            '</li>'
+          );
+        }
+      });
+}
 
+var run = function(){
+  var start = sessionStorage.getItem('start');
+  var now = Date.now(); 
+ 
+
+  document.getElementById('clock').innerHTML = formatTime(now-start);
+  window.setTimeout(run, 1000);
+}
+
+var deleteDB = function(){
+  hoodie.store.removeAll('time')
+  .done(function(removedTodos) {})
+  .fail(function(error) {});
+}
+
+// deleteDB();
+
+// run the clock
+run();
+
+// show the already saved times when page loads
+loadDOM();
 
 $('#track').bind('click', getTime);
