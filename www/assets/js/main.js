@@ -7,26 +7,54 @@ window.hoodie   = new Hoodie();
 window.timeTracker = window.timeTracker || {};
 
 
-
-// init vars
+var counter = 0;
 
 
 var getTime = function getTime(eve){
-    var time = Date.now();
-    var diff;
-    var start = sessionStorage.getItem('start');
+    
+    // run the clock
+    run();
+    
+    // reset clock
+    document.getElementById('clock').style.visibility = "";
+    document.getElementById('clock').innerHTML = '00 : 00 : 00';
 
-    if (start){
-      diff = Date.now() - start;
+    // get Time and save it in the sessionStorage so we can refere to it
+    var time = Date.now();
+
+    // if there is a start value, we get the diff how much time was spend.
+    // we format it and store it in the hoodie.store
+      sessionStorage.setItem('start', time);
+}
+
+var stopTime = function stopTime(){
+
+  sessionStorage.setItem('stop', Date.now());
+  document.getElementById('clock').style.visibility = "hidden";
+
+  var diff;
+  var start = sessionStorage.getItem('start');
+  var end = sessionStorage.getItem('stop');
+
+  diff = end - start;
 
       diff = formatTime(diff);
-
       hoodie.store.add('time', { title: diff })
         .done(function(time) { loadDOM(); })
         .fail(function(error){ alert(error); });
-    }
 
-    sessionStorage.setItem('start', time);
+}
+
+var toggleTimer = function toggleTimer(){
+  counter++;
+
+  if (counter % 2 == 0) {
+    stopTime();
+    console.log('stopTime');
+  } else {
+    getTime();
+    console.log('getTime');
+  }
 }
 
 
@@ -71,6 +99,9 @@ var formatTime = function formatTime(ms_time){
   return String(h)+ ' : ' + String(m) + ' : ' + String(s);
 }
 
+/*
+// loading the data from the hoodie.store in the DOM
+*/
 var loadDOM = function loadDOM(){
       hoodie.store.findAll('time').done(function(allTodos) {
         $('#timeList').empty();
@@ -84,14 +115,23 @@ var loadDOM = function loadDOM(){
       });
 }
 
+/*
+// running the clock
+// the clock shows the time from now to the time we started the timer
+// it updates every second and recalls the function, 
+// so we can show the exact tracked time on the clock
+*/
 var run = function(){
   var start = sessionStorage.getItem('start');
   var now = Date.now(); 
- 
 
   document.getElementById('clock').innerHTML = formatTime(now-start);
-  window.setTimeout(run, 1000);
+  setTimeout(run, 1000);
 }
+
+/*
+// helper to clear the hoodie.store
+*/
 
 var deleteDB = function(){
   hoodie.store.removeAll('time')
@@ -99,6 +139,9 @@ var deleteDB = function(){
   .fail(function(error) {});
 }
 
+/*
+// helper to make the hour, minute and second a double digit
+*/
 var addZero = function(n){
   if (n < 10) {
     n = '0' + String(n);
@@ -108,10 +151,7 @@ var addZero = function(n){
 
 // deleteDB();
 
-// run the clock
-run();
-
 // show the already saved times when page loads
 loadDOM();
 
-$('#track').bind('click', getTime);
+$('#track').bind('click', toggleTimer);
