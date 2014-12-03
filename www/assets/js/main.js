@@ -38,7 +38,7 @@ var getTime = function getTime(eve){
 */
 var formatTime = function formatTime(ms_time){
   var time = ms_time;
-  var ms, s, m, h;
+  var s, m, h;
 
 // when the tracked time is more then an hour (60 * 60 * 1000)
   if (time > 3600000) {
@@ -64,8 +64,9 @@ var formatTime = function formatTime(ms_time){
     s = 0;
   }
 
-// else the tracked time is less then a second
-  ms = time;
+  h = addZero(h);
+  m = addZero(m);
+  s = addZero(s);
 
   return String(h)+ ' : ' + String(m) + ' : ' + String(s);
 }
@@ -96,6 +97,13 @@ var deleteDB = function(){
   hoodie.store.removeAll('time')
   .done(function(removedTodos) {})
   .fail(function(error) {});
+}
+
+var addZero = function(n){
+  if (n < 10) {
+    n = '0' + String(n);
+  }
+  return n;
 }
 
 // deleteDB();
